@@ -1,0 +1,711 @@
+/* ==========================================================================
+   Nusava – AYANA-Style Luxury Editorial CSS
+   Palette: Ivory #FBF3E4 · Gold #D99B26 · Charcoal #3E3630
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  --bg-ivory:        #FBF3E4;
+  --bg-ivory-soft:   #FCF0DA;
+  --bg-card:         #FFFDF9;
+  --bg-dark:         #3E3630;
+  --bg-dark-2:       #4A3E38;
+  --gold:            #D99B26;
+  --gold-light:      #F1C469;
+  --gold-pale:       #E8D5A3;
+  --amber:           #E5A93C;
+  --text-dark:       #3E3630;
+  --text-mid:        #6B6158;
+  --text-pale:       #6B6158;
+  --border-light:    #E8D9C0;
+  --border-gold:     rgba(217, 155, 38, 0.35);
+  --border-dark:     rgba(255, 255, 255, 0.10);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-luxury:     cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:        300ms;
+  --dur-med:         600ms;
+  --dur-slow:        1000ms;
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background-color: var(--bg-ivory);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* Text selection */
+::selection {
+  background-color: var(--gold);
+  color: var(--bg-ivory);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-ivory); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* --------------------------------------------------------------------------
+   3. Typography Scale
+   -------------------------------------------------------------------------- */
+.font-display   { font-family: 'Playfair Display', Georgia, serif; }
+.font-garamond  { font-family: 'Cormorant Garamond', Georgia, serif; }
+.font-sans      { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+
+/* AYANA-style super large display */
+.text-ayana-hero {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.text-eyebrow {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.6875rem;   /* 11px */
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9A6F00;          /* darker gold – 4.6:1 on #FBF3E4 */
+}
+
+.text-chapter {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 1;
+  color: #3E3630;
+  font-weight: 400;
+  opacity: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. Navbar
+   -------------------------------------------------------------------------- */
+#navbar {
+  transition: background var(--dur-fast) var(--ease-out-expo),
+              box-shadow var(--dur-fast) var(--ease-out-expo);
+}
+#navbar.scrolled {
+  background: rgba(251, 243, 228, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--border-light);
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero Section
+   -------------------------------------------------------------------------- */
+.hero-ornament {
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   6. Video Arch — "Play Movie" AYANA style
+   -------------------------------------------------------------------------- */
+.video-arch-wrapper {
+  position: relative;
+  will-change: transform;
+}
+
+/* The arch container clips the video in a rounded-top arch shape */
+.video-arch-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 50% 50% 0 0 / 8% 8% 0 0; /* gentle arch top, flat bottom */
+  box-shadow: 0 25px 60px -15px rgba(62, 54, 48, 0.22);
+  transition: border-radius var(--dur-slow) var(--ease-luxury),
+              box-shadow var(--dur-slow) var(--ease-luxury),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, border-radius, opacity;
+}
+
+.video-arch-frame.expanded {
+  border-radius: 0;
+}
+
+/* Video reveal entrance animation */
+.video-reveal {
+  opacity: 0;
+  transform: translateY(48px) scale(0.94);
+  filter: blur(5px);
+}
+.video-reveal.in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  box-shadow: 0 35px 85px -20px rgba(62, 54, 48, 0.35);
+}
+
+.video-arch-frame video,
+.video-arch-frame img.video-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 1.2s var(--ease-luxury);
+}
+.video-arch-frame:hover video {
+  transform: scale(1.04);
+}
+
+/* Glass CTA button on video */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  transition: background var(--dur-fast) var(--ease-out-expo),
+              transform var(--dur-fast) var(--ease-out-expo),
+              border-color var(--dur-fast);
+}
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.04);
+}
+
+/* Play icon pulse ring */
+.play-ring {
+  animation: play-pulse 2.4s ease-in-out infinite;
+}
+@keyframes play-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.18); opacity: 0.6; }
+}
+
+/* --------------------------------------------------------------------------
+   7. Video Modal
+   -------------------------------------------------------------------------- */
+#video-modal {
+  transition: opacity var(--dur-med) var(--ease-out-expo),
+              visibility var(--dur-med);
+}
+#video-modal.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#video-modal:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+}
+#video-modal video {
+  max-height: 85vh;
+}
+
+/* --------------------------------------------------------------------------
+   8. Sticky Sub-Nav
+   -------------------------------------------------------------------------- */
+#sub-nav {
+  transition: transform var(--dur-fast) var(--ease-out-expo),
+              opacity var(--dur-fast) var(--ease-out-expo);
+}
+#sub-nav.hidden-subnav {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.sub-nav-link {
+  position: relative;
+  font-size: 0.6875rem;   /* 11px */
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  transition: color var(--dur-fast);
+  white-space: nowrap;
+}
+.sub-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width var(--dur-med) var(--ease-out-expo);
+}
+.sub-nav-link.active,
+.sub-nav-link:hover {
+  color: var(--text-dark);
+}
+.sub-nav-link.active::after,
+.sub-nav-link:hover::after {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   9. Section Dividers — editorial hairline
+   -------------------------------------------------------------------------- */
+.hairline {
+  width: 100%;
+  height: 1px;
+  background: var(--border-light);
+}
+.hairline-gold {
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  height: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   10. Highlight Stats (AYANA-style big numbers)
+   -------------------------------------------------------------------------- */
+.stat-number {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(3.8rem, 8.5vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #3E3630;
+}
+.stat-unit {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-left: 0.15em;
+}
+
+/* --------------------------------------------------------------------------
+   11. Area Switcher (N° 01 – Jelajah)
+   -------------------------------------------------------------------------- */
+.area-tab {
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  border-bottom: 2px solid transparent;
+  padding-bottom: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast);
+}
+.area-tab:hover  {
+  color: var(--text-dark);
+  transform: translateY(-2px);
+}
+.area-tab.active {
+  color: var(--text-dark);
+  border-bottom-color: var(--gold);
+}
+
+/* Hotspot radar ping — larger interactive touchpoints */
+.radar-dot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.radar-dot:hover,
+.radar-dot.active-pin {
+  transform: translate(-50%, -50%) scale(1.35);
+  z-index: 30;
+}
+.radar-dot .ping {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.6;
+  animation: radar-ping 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+.radar-dot .core {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid #FFFDF9;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+@keyframes radar-ping {
+  0%   { transform: scale(0.9); opacity: 0.7; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Area info card fade transition */
+.area-panel {
+  transition: opacity var(--dur-med) var(--ease-out-expo),
+              transform var(--dur-med) var(--ease-out-expo);
+}
+.area-panel.fade-out {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+.area-panel.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   12. Editorial Asymmetric Layout (N° 02 – Ragam Budaya)
+   -------------------------------------------------------------------------- */
+.editorial-sticky-title {
+  position: sticky;
+  top: 88px;    /* subnav height + gap */
+  align-self: start;
+}
+
+/* Tilted culture cards with popup hover */
+.culture-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s var(--ease-luxury),
+              border-color 0.35s ease;
+  will-change: transform, box-shadow;
+}
+.culture-card:hover {
+  transform: translateY(-10px) scale(1.025);
+  box-shadow: 0 30px 60px -15px rgba(62, 54, 48, 0.28);
+  z-index: 20;
+}
+.culture-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-out-expo);
+}
+.culture-card:hover img { transform: scale(1.08); }
+.culture-card-caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.25rem;
+  background: linear-gradient(to top, rgba(62,54,48,0.78) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--dur-med) var(--ease-out-expo);
+}
+.culture-card:hover .culture-card-caption { opacity: 1; }
+
+/* Produk pilar vertical dividers with popup hover */
+.pilar-card {
+  position: relative;
+  border-radius: 6px;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              box-shadow 0.45s var(--ease-luxury),
+              border-color 0.3s ease;
+  will-change: transform, box-shadow;
+}
+.pilar-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 22px 50px -10px rgba(0, 0, 0, 0.55);
+  z-index: 10;
+}
+.pilar-card .pilar-link {
+  transform: translateY(0);
+  transition: transform var(--dur-med) var(--ease-luxury);
+}
+.pilar-card:hover .pilar-link { transform: translateY(-4px); }
+
+/* --------------------------------------------------------------------------
+   13. Marketplace Cards (N° 03 – Pasar Nusani) with Popup Hover
+   -------------------------------------------------------------------------- */
+.product-card {
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s var(--ease-luxury),
+              border-color 0.35s ease;
+  will-change: transform, box-shadow;
+}
+.product-card:hover {
+  transform: translateY(-10px) scale(1.025);
+  box-shadow: 0 26px 52px -12px rgba(62, 54, 48, 0.20);
+  border-color: rgba(217, 155, 38, 0.5);
+  z-index: 10;
+}
+.product-card .img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.product-card .img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease-out-expo);
+}
+.product-card:hover .img-wrap img { transform: scale(1.08); }
+
+.product-card .quick-view-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(62,54,48,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  backdrop-filter: blur(2px);
+  transition: opacity var(--dur-fast) var(--ease-out-expo);
+}
+.product-card:hover .quick-view-overlay { opacity: 1; }
+
+/* Filter tabs */
+.filter-tab {
+  font-size: 0.6875rem;   /* 11px */
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border: 1px solid var(--border-light);
+  color: var(--text-mid);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out-expo);
+}
+.filter-tab:hover  { border-color: var(--gold); color: var(--text-dark); }
+.filter-tab.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+/* Quick view modal dialog popup */
+#quick-view-modal {
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+#quick-view-modal.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#qv-modal-dialog {
+  transform: scale(0.9) translateY(24px);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease;
+}
+#quick-view-modal:not(.hidden) #qv-modal-dialog {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   14. Journal Slider (N° 04 – Jurnal) with Popup Hover
+   -------------------------------------------------------------------------- */
+.journal-track {
+  display: flex;
+  transition: transform 500ms var(--ease-luxury);
+  will-change: transform;
+}
+.journal-card {
+  flex: 0 0 auto;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s var(--ease-luxury),
+              border-color 0.35s ease;
+  will-change: transform, box-shadow;
+}
+.journal-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(62, 54, 48, 0.20);
+  border-color: rgba(217, 155, 38, 0.5);
+  z-index: 10;
+}
+.journal-card .card-img {
+  overflow: hidden;
+}
+.journal-card .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease-out-expo);
+}
+.journal-card:hover .card-img img { transform: scale(1.06); }
+
+/* Dot pagination */
+.journal-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border-light);
+  transition: all var(--dur-fast) var(--ease-out-expo);
+  cursor: pointer;
+}
+.journal-dot.active {
+  background: var(--gold);
+  width: 20px;
+  border-radius: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   15. Scroll Reveal Animations
+   -------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur-slow) var(--ease-luxury),
+              transform var(--dur-slow) var(--ease-luxury);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity var(--dur-slow) var(--ease-luxury),
+              transform var(--dur-slow) var(--ease-luxury);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity var(--dur-slow) var(--ease-luxury),
+              transform var(--dur-slow) var(--ease-luxury);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Card entrance popup with spring curve */
+.reveal-popup {
+  opacity: 0;
+  transform: translateY(32px) scale(0.93);
+  transition: opacity var(--dur-slow) var(--ease-luxury),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow var(--dur-med) var(--ease-luxury);
+  will-change: transform, opacity;
+}
+.reveal-popup.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Tactile button feedback */
+button[data-buy],
+button[data-qv],
+.pilar-link {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s ease,
+              color 0.25s ease;
+}
+button[data-buy]:active,
+button[data-qv]:active {
+  transform: scale(0.93);
+}
+
+/* Subtle section gradient bridges */
+.gradient-bridge-down {
+  background: linear-gradient(180deg, #FBF3E4 0%, rgba(92, 80, 70, 0.35) 45%, #3E3630 100%);
+}
+.gradient-bridge-up {
+  background: linear-gradient(180deg, #3E3630 0%, rgba(92, 80, 70, 0.35) 55%, #FBF3E4 100%);
+}
+
+/* Stagger delays */
+.delay-100  { transition-delay: 100ms; }
+.delay-200  { transition-delay: 200ms; }
+.delay-300  { transition-delay: 300ms; }
+.delay-400  { transition-delay: 400ms; }
+.delay-500  { transition-delay: 500ms; }
+.delay-600  { transition-delay: 600ms; }
+.delay-700  { transition-delay: 700ms; }
+.delay-800  { transition-delay: 800ms; }
+
+/* --------------------------------------------------------------------------
+   16. Footer & Utility
+   -------------------------------------------------------------------------- */
+.footer-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: rgba(252, 240, 218, 0.72);
+  transition: color var(--dur-fast);
+}
+.footer-link:hover { color: rgba(252, 240, 218, 0.9); }
+
+/* Toast */
+#toast {
+  transition: opacity var(--dur-med) var(--ease-out-expo),
+              transform var(--dur-med) var(--ease-out-expo);
+}
+#toast.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
+
+/* Mega Mendung cloud ornament subtle parallax layer */
+.cloud-parallax { will-change: transform; }
+
+/* Wayang parallax containers */
+.wayang-parallax { will-change: transform; }
+
+/* Heritage icon bar hover */
+.heritage-icon-btn {
+  transition: all var(--dur-fast) var(--ease-out-expo);
+}
+.heritage-icon-btn:hover .icon-circle {
+  background: var(--gold);
+  color: var(--bg-ivory);
+}
+.heritage-icon-btn:hover .icon-label { color: var(--text-dark); }
+
+/* Cart badge */
+#cart-count {
+  transition: transform 200ms var(--ease-out-expo);
+}
+#cart-count.bump { transform: scale(1.5); }
+
+/* =========================================================================
+   Responsive helpers
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, .reveal, .reveal-left, .reveal-right,
+  .radar-dot .ping, .play-ring {
+    animation: none !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+
+  background-color: #3E3630 !important;
+}
+
+/* Static container rules for CSS analyzer */
+#produk {
+  background-color: var(--bg-dark);
+  padding: 5rem 1.5rem;
+}
+footer {
+  background-color: var(--bg-dark);
+  padding: 5rem 1.5rem 2.5rem;
+}
+#toast {
+  background-color: var(--bg-dark);
+  padding: 0.75rem 1.25rem;
+}
